@@ -1,49 +1,47 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ status: 'ERR', message: 'Thiếu token' });
+const verifyToken=(req,res,next) =>{
+  const authHeader=req.headers.token;
+  console.log(authHeader)
+  const token=authHeader&&authHeader.split(' ')[1];
+  if(!token) {
+       return res.status(401).json({ status: 'ERR', message: 'Thiếu token' });
   }
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
+  jwt.verify(token,process.env.ACCESS_TOKEN,(err,user)=>{
+      if(err) {
         return res.status(401).json({ status: 'ERR', message: 'Token không hợp lệ' });
-    }
-
-    if (!user.isAdmin) {
-        return res.status(403).json({ status: 'ERR', message: 'Không có quyền admin' });
-    }
-
-    req.user = user;
-    next();
-  });
-};
-
-const authUserMiddleware = (req, res, next) => {
-  const userId = req.params.userId;
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.status(401).json({ status: 'ERR', message: 'Thiếu token' });
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-        return res.status(401).json({ status: 'ERR', message: 'Token không hợp lệ' });
-    }
-
-    if (user.isAdmin || user._id === userId) {
-      req.user = user;
+      }
+      req.user=user;
       next();
-    } else {
+  })
+}
+
+const authUser=(req,res,next) =>{
+  verifyToken(req,res,next);
+}
+
+const authAdmin=(req,res,next)=>{
+  verifyToken(req,res,()=>{
+    if(!req.user.isAdmin) {
+      return res.status(404).json({ status: 'ERR', message: 'Không có quyền admin' })
+    }
+    next();
+  })
+}
+const authUserOrAdmin  = (req, res, next) => {
+  verifyToken(req,res, () =>{
+    if(req.user.id===req.params.userId||req.user.isAdmin) {
+        next();
+    }
+    else {
+       
       return res.status(403).json({ status: 'ERR', message: 'Không đủ quyền' });
     }
-  });
+  })
 };
 
 module.exports = {
-  authMiddleware,
-  authUserMiddleware
+  authUserOrAdmin,
+  authAdmin,
+  authUser
 };
