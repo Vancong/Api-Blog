@@ -12,4 +12,6 @@ router.delete('/delete/:id/:userId',authUserOrAdmin,commentControllers.delete)
 router.get('/get-all/:postId',commentControllers.getAll)
 
 router.post('/tonggle-like/:commentId',authUser,commentControllers.tonggleLike)
+
+
 module.exports=router;

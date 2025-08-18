@@ -9,7 +9,8 @@ const commentSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-  ]
+  ],
+  parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment", default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Comment', commentSchema);
