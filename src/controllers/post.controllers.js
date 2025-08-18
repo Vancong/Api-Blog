@@ -25,3 +25,9 @@ module.exports.delete=asyncHandler(async(req,res) =>{
     const response= await postService.delete(req.params.id);
     res.status(200).json(response)
 })
+
+
+module.exports.tonggleLike=asyncHandler(async(req,res) =>{
+    const response= await postService.tonggleLike(req.params.postId,req.user.id);
+    res.status(200).json(response)
+})

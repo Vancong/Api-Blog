@@ -83,3 +83,24 @@ module.exports.delete=async(id) =>{
         message: 'Xóa bài viết thành công',
     }
 }
+
+module.exports.tonggleLike=async(postId,userId) =>{
+   
+    const post=await postDtb.findById(postId)
+    if(!post) {
+        throw createError(400,'Không tồn tại bài viết')
+    }
+    if(post.likes.includes(userId)) {
+        post.likes=post.likes.filter(userlike => userlike!==userId)
+    }
+    else {
+        post.likes.push(userId)
+    }
+    
+    await post.save()
+    return {
+        status: 'OK',
+        message: 'Thành công',
+        data: post.likes ||[]
+    }
+}

@@ -11,6 +11,8 @@ router.get('/detail/:id',postControllers.detail);
 
 router.patch('/update/:id/:userId',authUserOrAdmin,postControllers.update);
 
-router.delete('/delete/:id/:userId',authUserOrAdmin,postControllers.delete)
+router.delete('/delete/:id/:userId',authUserOrAdmin,postControllers.delete);
+
+router.post('/tonggle-like/:postId',authUser,postControllers.tonggleLike)
 
 module.exports=router

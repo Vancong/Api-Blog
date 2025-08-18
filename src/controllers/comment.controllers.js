@@ -29,6 +29,7 @@ module.exports.getAll=asyncHandler(async(req,res) =>{
     res.status(200).json(response)
 })
 
-
-
-
+module.exports.tonggleLike=asyncHandler(async(req,res) =>{
+    const response= await commentService.tonggleLike(req.params.commentId,req.user.id);
+    res.status(200).json(response)
+})

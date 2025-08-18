@@ -63,3 +63,24 @@ module.exports.getAll=async (postId) =>{
         data: comments
     }
 }
+
+module.exports.tonggleLike=async(commentId,userId) =>{
+   
+    const comment=await CommentDtb.findById(commentId)
+    if(!comment) {
+        throw createError(400,'Không tồn tại comment')
+    }
+    if(comment.likes.includes(userId)) {
+        comment.likes=comment.likes.filter(userlike => userlike!==userId)
+    }
+    else {
+        comment.likes.push(userId)
+    }
+    
+    await comment.save()
+    return {
+        status: 'OK',
+        message: 'Thành công',
+        data: comment.likes ||[]
+    }
+}
