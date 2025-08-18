@@ -2,8 +2,12 @@ const createError=require('../helpers/createError.helpers');
 const postDtb=require('../models/Post.models')
 
 module.exports.create=async(data,userId) =>{
+    const {title,content,tags,thumbnail}=data;
     const post= new postDtb({
-        ...data,
+        title,
+        content,
+        tags,
+        thumbnail,
         user: userId
     })
      await post.save();
