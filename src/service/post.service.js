@@ -18,17 +18,45 @@ module.exports.create=async(data,userId) =>{
     }
 }
 
-module.exports.getAll=async() =>{
-   
-    const posts=await postDtb.find()
+module.exports.getAll=async(data) =>{
+    const {limit=4,page=1,search='',tags,key='createdAt',value='desc'}=data;
+    let query={};
+    if(tags){
+        const tags=data.tags.split(',')
+        query.tags={$in: tags} 
+    }
+    if(search.trim()) {
+        query.$or=[
+            { title: { $regex: search, $options: "i" } },
+            { content: { $regex: search, $options: "i" } }
+        ]
+    }
+    console.log(query)
+    
+    let sort={};
+    if(key&&value) {
+        const sortValue=value==='asc'?1:-1
+        sort[key]=sortValue;
+    }
+
+    const skip= (page-1)*limit;
+
+    const posts=await postDtb.find(query)
                     .populate('user','fullName email')
-                    .sort({createdAt: -1})
-
-
+                    .skip(skip)
+                    .limit(limit)
+                    .sort(sort)
+                              
+    const total=await postDtb.countDocuments(query);
     return {
         status: 'OK',
-        message: 'Tạo bài viết thành công',
-        data: posts
+        message: 'Lấy danh sách bài viết thành công',
+        data: posts,
+        pagination:{
+            total,
+            toalPages: Math.ceil(total/limit)
+        }
+
     }
 }
 

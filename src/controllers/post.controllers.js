@@ -7,7 +7,7 @@ module.exports.create=asyncHandler(async(req,res) =>{
 })
 
 module.exports.getAll=asyncHandler(async(req,res) =>{
-    const response= await postService.getAll();
+    const response= await postService.getAll(req.query);
     res.status(200).json(response)
 })
 
