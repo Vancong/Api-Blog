@@ -13,6 +13,8 @@ router.patch('/update/:id/:userId',authUserOrAdmin,postControllers.update);
 
 router.delete('/delete/:id/:userId',authUserOrAdmin,postControllers.delete);
 
-router.post('/tonggle-like/:postId',authUser,postControllers.tonggleLike)
+router.post('/tonggle-like/:postId',authUser,postControllers.tonggleLike);
+
+router.get('/get-post-user/:userId',authUser,postControllers.getPostUser)
 
 module.exports=router

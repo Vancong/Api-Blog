@@ -132,3 +132,20 @@ module.exports.tonggleLike=async(postId,userId) =>{
         data: post.likes ||[]
     }
 }
+
+module.exports.getPostUser=async(userId) =>{
+   
+    const getPostUser=await postDtb.find({
+        user: userId
+    }).populate('user','fullName')
+
+    if(getPostUser.length===0) {
+        throw createError(400,'Không có bài viết nào')
+    }
+
+    return {
+        status: 'OK',
+        message: 'Thành công',
+        data: getPostUser
+    }
+}

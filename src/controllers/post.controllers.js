@@ -31,3 +31,8 @@ module.exports.tonggleLike=asyncHandler(async(req,res) =>{
     const response= await postService.tonggleLike(req.params.postId,req.user.id);
     res.status(200).json(response)
 })
+
+module.exports.getPostUser=asyncHandler(async(req,res) =>{
+    const response= await postService.getPostUser(req.params.userId);
+    res.status(200).json(response)
+})
