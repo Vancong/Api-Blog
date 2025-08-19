@@ -39,3 +39,15 @@ module.exports.logout=asyncHandler(async (req,res) =>{
         message: 'Đăng xuất thành công'
     })
 })
+
+module.exports.update=asyncHandler(async(req,res)=>{
+    const data=req.body;
+    const response=await UserService.update(data,req.user.id);
+    return res.status(200).json(response)
+})
+
+module.exports.changePassword=asyncHandler(async(req,res)=>{
+    const data=req.body;
+    const response=await UserService.changePassword(data,req.user.id);
+    return res.status(200).json(response)
+})

@@ -60,3 +60,47 @@ module.exports.login=async (data)=>{
         refresh_token
     }
 }
+
+
+module.exports.update= async(data,userId) =>{
+    let {fullName,email,bio,}=data;
+    let checkUser=await UserDtb.findById(userId)
+    if(!checkUser) {
+        throw createError(404,' Không tồn tại user')
+    }
+    const updateUser= await UserDtb.findByIdAndUpdate({
+        _id:userId
+    },{
+        fullName,email,bio
+    },{new:true})
+
+
+    return {
+        status: 'OK',
+        message: "Cập nhật thành công",
+        data: updateUser
+    }
+}
+
+module.exports.changePassword= async(data,userId) =>{
+    let {oldPassword,newPassword}=data;
+    let checkUser=await UserDtb.findById(userId)
+    if(!checkUser) {
+        throw createError(404,' Không tồn tại user')
+    }
+
+    const checkPass= await bcrypt.compare(oldPassword,checkUser.password);
+    if(!checkPass)    throw createError(400,' Mật khẩu cũ không đúng')
+    
+    const hashPass= await bcrypt.hash(newPassword,10);
+
+    checkUser.password=hashPass;
+    
+    await checkUser.save();
+
+
+    return {
+        status: 'OK',
+        message: "Đổi mật khẩu thành công",
+    }
+}
