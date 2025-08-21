@@ -7,17 +7,13 @@ module.exports.create=asyncHandler(async(req,res) =>{
 })
 
 module.exports.update=asyncHandler(async(req,res) =>{
-    const data={
-        content: req.body.content,
-        commentId: req.params.id
-    }
-    const response= await commentService.update(data);
+    const response= await commentService.update(req);
     res.status(200).json(response)
 })
 
 
 module.exports.delete=asyncHandler(async(req,res) =>{
-    const response= await commentService.delete(req.params.id);
+    const response= await commentService.delete(req);
     res.status(200).json(response)
 })
 
@@ -30,6 +26,6 @@ module.exports.getAll=asyncHandler(async(req,res) =>{
 })
 
 module.exports.tonggleLike=asyncHandler(async(req,res) =>{
-    const response= await commentService.tonggleLike(req.params.commentId,req.user.id);
+    const response= await commentService.tonggleLike(req);
     res.status(200).json(response)
 })

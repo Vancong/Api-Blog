@@ -1,17 +1,17 @@
 const express=require('express');
 const router=express.Router();
 const commentControllers=require('../controllers/comment.controllers');
-const {authUser,authUserOrAdmin}=require('../middleware/auth.middeware')
+const {authUser,authUserOrAdminComment}=require('../middleware/auth.middeware')
 
-router.post('/create',authUser,commentControllers.create);
+router.post('/', authUser, commentControllers.create);
 
-router.patch('/update/:id/:userId',authUserOrAdmin,commentControllers.update)
+router.patch('/:commentId', authUser,authUserOrAdminComment, commentControllers.update);
 
-router.delete('/delete/:id/:userId',authUserOrAdmin,commentControllers.delete)
+router.delete('/:commentId', authUser,authUserOrAdminComment, commentControllers.delete); 
 
-router.get('/get-all/:postId',commentControllers.getAll)
+router.get('/post/:postId', commentControllers.getAll); 
 
-router.post('/tonggle-like/:commentId',authUser,commentControllers.tonggleLike)
+router.post('/:commentId/toggle-like', authUser, commentControllers.tonggleLike); 
 
 
 module.exports=router;

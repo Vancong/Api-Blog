@@ -1,20 +1,21 @@
-const express=require('express');
-const router=express.Router();
-const postControllers=require('../controllers/post.controllers');
-const {authUser,authUserOrAdmin} =require('../middleware/auth.middeware')
+const express = require('express');
+const router = express.Router();
+const postControllers = require('../controllers/post.controllers');
+const { authUser ,authUserOrAdminPost} = require('../middleware/auth.middeware');
 
-router.post('/create',authUser ,postControllers.create);
 
-router.get('/get-all',postControllers.getAll);
+router.post('/', authUser, postControllers.create); 
 
-router.get('/detail/:id',postControllers.detail);
+router.get('/', postControllers.getAll);             
 
-router.patch('/update/:id/:userId',authUserOrAdmin,postControllers.update);
+router.get('/:postId', postControllers.detail);         
 
-router.delete('/delete/:id/:userId',authUserOrAdmin,postControllers.delete);
+router.patch('/:postId',authUser ,authUserOrAdminPost, postControllers.update); 
 
-router.post('/tonggle-like/:postId',authUser,postControllers.tonggleLike);
+router.delete('/:postId', authUser,authUserOrAdminPost, postControllers.delete);
 
-router.get('/get-post-user/:userId',authUser,postControllers.getPostUser)
+router.post('/:postId/toggle-like', authUser, postControllers.toggleLike);
 
-module.exports=router
+router.get('/user/:userId', authUser, postControllers.getPostUser);
+
+module.exports = router;

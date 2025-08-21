@@ -1,6 +1,7 @@
 const createError=require('../helpers/createError.helpers');
 const postDtb=require('../models/Post.models')
 
+
 module.exports.create=async(data,userId) =>{
     const {title,content,tags,thumbnail}=data;
     const post= new postDtb({
@@ -75,17 +76,17 @@ module.exports.detail=async(id) =>{
     }
 }
 
-module.exports.update=async(data,id) =>{
-   
-    const post=await postDtb.findById(id)
-        
-    if(!post) {
-        throw createError(400,'Không tồn tại bài viết')
-    }
+module.exports.update=async(req) =>{
+    const data=req.body;
+    const postUpdate=req.post;
+    
     if(data.user) delete data.user;
-    const postUpdate= await postDtb.findOneAndUpdate({
-        _id: id
-    },data,{new:true});
+
+    for (let key in data) {
+        postUpdate[key] = data[key];
+    }
+
+    await postUpdate.save();
 
     return {
         status: 'OK',
@@ -95,16 +96,10 @@ module.exports.update=async(data,id) =>{
 }
 
 
-module.exports.delete=async(id) =>{
+module.exports.delete=async(req) =>{
    
-    const post=await postDtb.findById(id)
-        
-    if(!post) {
-        throw createError(400,'Không tồn tại bài viết')
-    }
-    
     await postDtb.deleteOne({
-        _id:id
+        _id:req.post._id
     })
     return {
         status: 'OK',
@@ -112,14 +107,14 @@ module.exports.delete=async(id) =>{
     }
 }
 
-module.exports.tonggleLike=async(postId,userId) =>{
-   
+module.exports.tonggleLike=async(req) =>{
+    const postId=req.params.postId;
+    const userId=req.user.id;
+    
     const post=await postDtb.findById(postId)
-    if(!post) {
-        throw createError(400,'Không tồn tại bài viết')
-    }
+
     if(post.likes.includes(userId)) {
-        post.likes=post.likes.filter(userlike => userlike!==userId)
+        post.likes=post.likes.filter(userlike => userlike.toString()!==userId.toString())
     }
     else {
         post.likes.push(userId)

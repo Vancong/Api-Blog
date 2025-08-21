@@ -3,16 +3,10 @@ const router=express.Router();
 const userControllers=require('../controllers/user.controllers');
 const {authUserOrAdmin, authUser} =require('../middleware/auth.middeware')
 
-router.post('/register', userControllers.register);
+router.get('/me', authUser, userControllers.getMe);
 
-router.post('/login',userControllers.login);
+router.patch('/:userId',authUser, authUserOrAdmin, userControllers.update);
 
-router.post('/refresh-token',userControllers.refreshToken);
-
-router.get('/logout',userControllers.logout);
-
-router.patch('/update/:userId',authUserOrAdmin ,userControllers.update);
-
-router.patch('/change-password', authUser,userControllers.changePassword)
+router.patch('/me/password', authUser, userControllers.changePassword);
 
 module.exports=router;

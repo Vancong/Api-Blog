@@ -12,23 +12,23 @@ module.exports.getAll=asyncHandler(async(req,res) =>{
 })
 
 module.exports.detail=asyncHandler(async(req,res) =>{
-    const response= await postService.detail(req.params.id);
+    const response= await postService.detail(req.params.postId);
     res.status(200).json(response)
 })
 
 module.exports.update=asyncHandler(async(req,res) =>{
-    const response= await postService.update(req.body,req.params.id);
+    const response= await postService.update(req);
     res.status(200).json(response)
 })
 
 module.exports.delete=asyncHandler(async(req,res) =>{
-    const response= await postService.delete(req.params.id);
+    const response= await postService.delete(req);
     res.status(200).json(response)
 })
 
 
-module.exports.tonggleLike=asyncHandler(async(req,res) =>{
-    const response= await postService.tonggleLike(req.params.postId,req.user.id);
+module.exports.toggleLike=asyncHandler(async(req,res) =>{
+    const response= await postService.tonggleLike(req);
     res.status(200).json(response)
 })
 

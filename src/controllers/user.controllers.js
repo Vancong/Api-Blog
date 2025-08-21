@@ -22,7 +22,6 @@ module.exports.login=asyncHandler(async(req,res)=>{
 })
 
 module.exports.refreshToken=asyncHandler(async (req,res) =>{
-    console.log('Token client gửi lên refresh:', req.cookies.refresh_token);
     const token=req.cookies.refresh_token;
     if(!token) {
         throw createError(401, 'Thiếu refresh token');
@@ -47,7 +46,11 @@ module.exports.update=asyncHandler(async(req,res)=>{
 })
 
 module.exports.changePassword=asyncHandler(async(req,res)=>{
-    const data=req.body;
-    const response=await UserService.changePassword(data,req.user.id);
+    const response=await UserService.changePassword(req);
+    return res.status(200).json(response)
+})
+
+module.exports.getMe=asyncHandler(async(req,res)=>{
+    const response=await UserService.getMe(req.user.id);
     return res.status(200).json(response)
 })
