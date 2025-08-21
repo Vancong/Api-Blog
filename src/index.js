@@ -12,10 +12,7 @@ const dtb=require('./config/database');
 
 dtb.connect();
 
-app.use(cors({
-  origin: "*",   
-}))
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
